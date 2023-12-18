@@ -1,0 +1,153 @@
+<div class="content" role="main">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%!important; margin: 0px !important;">
+    <div class="container-fluid">     
+      
+      <a class="navbar-brand">3er Parcial</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarScroll">
+        <form class="d-flex">
+
+        <div class="dropdown">
+          <button class="btn btn-secondary  dropdown-toggle" type="button" id="dropdownMenuButtonL" data-bs-toggle="dropdown" aria-extended="true" style="margin-right: 20px;"> 
+            LIBRO
+          </button>
+          <ul class="nav navbar-nav navbar-right" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuButtonL" style="cursor: pointer;">
+            <li class="dropdown-item" (click)="openModal('modalLibro')">Agregar nuevo</li>
+            <li class="dropdown-item">Lista</li>
+          </ul>
+        </div>
+        <div class="dropdown">
+          <button class="btn btn-secondary  dropdown-toggle" type="button" id="dropdownMenuButtonP" data-bs-toggle="dropdown" aria-extended="true" style="margin-right: 20px;"> 
+            PARABOLA
+          </button>
+          <ul class="nav navbar-nav navbar-right" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuButtonP" style="cursor: pointer;">
+            <li class="dropdown-item" (click)="isUpdate = false; openModal('myModal')">Agregar nuevo</li>
+            <li class="dropdown-item">Actualizar</li>
+            <li class="dropdown-item" (click)="clearAll.showModal()">Eliminar todo</li>
+          </ul>
+        </div>
+          <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+ 
+  <dialog id="clearAll" #clearAll style="border-style: none;">
+    <h3>¡ALERTA!</h3>
+    <p>¡Confirme para eliminar todos los registros de parabola/Historias biblicas!</p><br>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-success" data-dismiss="modal" style="margin-right: 30px;" (click)="eliminarTodo(); clearAll.close(); loadParabola();">Confirmar</button>
+      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="clearAll.close()">Cancelar</button>
+    </div>
+  </dialog>
+
+
+  <div id="myModal" class="modal" data-mdb-backdrop="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+  
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Crear nueva Parabola/Historia Biblica</h4>
+          <button type="button" class="close" data-dismiss="modal" (click)="closeModal('myModal')"style="border-style: none; border-radius: 100%;">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="id">Id:</label>
+            <input type="text" class="form-control" [(ngModel)]="parabola.id" id="idP" >
+          </div>
+          <div class="form-group">
+            <label for="name">Nombre:</label>
+            <input type="text" class="form-control" [(ngModel)]="parabola.nombre" id="nameP">
+          </div>
+          <div class="form-group">
+            <label for="texto">Texto corto:</label>
+            <input type="text" class="form-control" [(ngModel)]="parabola.texto" id="textoP">
+          </div>
+          <div class="form-group">
+            <label for="desc">Descripcion:</label>
+            <textarea type="text" class="form-control" [(ngModel)]="parabola.descripcion" id="descP"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="img">Imagen path:</label>
+            <input type="text" class="form-control" [(ngModel)]="parabola.imagen" id="imgP">
+          </div>
+          Libro: <select class="form-select" aria-label="Default select example" [(ngModel)]="parabola.idcategoria">
+            <option *ngFor="let item of listCategoria" [value]="item.id">{{item.nombre}}</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="actualizarParabola()" *ngIf="isUpdate">Actualizar</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="guardarParabola()"  *ngIf="!isUpdate">Guardar</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal('myModal')">Close</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+  <div id="modalLibro" class="modal" data-mdb-backdrop="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+  
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Agregar nuevo Libro</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal('modalLibro')" style="border-style: none; border-radius: 100%;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+              <div class="col">
+                <label>Id:</label>
+                <input type="number" class="form-control" [(ngModel)]="libro.id" id="idL">
+              </div>
+              <div class="col">
+                <label>Nombre:</label>
+                <input type="text" class="form-control" [(ngModel)]="libro.nombre" id="nameL">
+              </div>
+            </div>
+            Categoría: <select class="form-select" aria-label="Default select example" [(ngModel)]="libro.categoria">
+              <option *ngFor="let item of categoria" [value]="item.id">{{item.name}}</option>
+            </select>
+          
+          <div style="width: 100%; padding: 5px; display: flex; justify-content: right;">
+            <button type="button" [class]="isUpdateL ? 'btn btn-primary' : 'btn btn-success'" (click)="guardarLibro()" style="margin-right: 20px;">{{isUpdateL ? 'Actualizar' : 'Guardar'}}</button>
+            <!-- <button type="button" class="btn btn-success" (click)="guardarLibro()" style="margin-right: 20px;">Guardar</button> -->
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal('modalLibro')">Cancelar</button>
+          </div>
+          <h2>Libros</h2>
+          <p>Lista de libros registrados:</p>            
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Categoria</th>
+                <th>Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of listCategoria">
+                <td>{{item.id}}</td>
+                <td>{{item.nombre}}</td>
+                <td>{{item.catname}}</td>
+                <td>
+                  <button class="btn" (click)="eliminarLibro(item.id)"><i class="fa fa-trash"></i></button>
+                  <button class="btn" (click)="editarLibro(item)"><i class="fa fa-pencil"></i></button>
+                </td>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  
+  <app-itemlist [listparabola]="listParabola"></app-itemlist>
+</div>
+  

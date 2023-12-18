@@ -1,0 +1,23 @@
+ <div style=" display: flex; flex-wrap: wrap;">
+
+  <div class="card" style="width: 18rem;" class="card" *ngFor="let parabola of listparabola">
+    <img class="card-img-top" [src]="parabola.imagen || 'https://www.usbforwindows.com/storage/img/images_3/function_set_default_image_when_image_not_present.png'" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">{{parabola.nombre}} ({{parabola.catname}}) </h5>
+      <p class="card-text">{{parabola.texto}}</p>
+    </div>
+    <div class="actions">
+      <button class="cancel" type="button" (click)="updateParabola(parabola)">Editar</button>
+      <button class="desactivate" type="button" (click)="aviso.showModal()">Eliminar</button>
+   </div>
+   <dialog id="aviso" #aviso style="border-style: none;">
+     <h3>¡Esta intentando eliminar un registro!</h3>
+     <p>¡Confirme para borrar <strong>{{parabola.nombre}}</strong>!</p>
+     <div class="modal-footer" style="background-color: transparent;">
+       <button type="button" class="btn btn-success" data-dismiss="modal" style="margin-right: 30px;" (click)="eliminar(parabola.id)">Confirmar</button>
+       <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="aviso.close()">Cancelar</button>
+     </div>
+   </dialog>
+  </div>
+
+</div>
